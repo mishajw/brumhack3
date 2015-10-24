@@ -37,16 +37,12 @@ app.post('/upload', function (req, res) {
         console.log("Got one file");
     }
     
-<<<<<<< HEAD
     res.writeHead(302, {
       'Location': 'results.html'
       //add other headers here...
     });
     
     res.end();
-=======
-    res.sendStatus(200);
->>>>>>> abb230bc9bd217fbed8c621485e3be212c12432b
 });
 
 var server = app.listen(3000, function () {
