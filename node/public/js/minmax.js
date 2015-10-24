@@ -14,6 +14,9 @@ function MinMax(dataset, getter) {
     
     // Should always return a value between 0 and 1.
     this.getScaledValue = function(val) {
+				if (this.min == this.max) {
+					return 1;
+				}
         return (val - this.min) / (this.max - this.min);
     }
 }
