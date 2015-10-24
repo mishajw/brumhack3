@@ -24,8 +24,6 @@ app.get('/misha', function (req, res) {
   res.send('Hello Misha!');
 });
 
-app.
-
 app.post('/upload', function (req, res) {
     var files = req.files.file;
     
