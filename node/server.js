@@ -24,6 +24,7 @@ app.get('/misha', function (req, res) {
   res.send('Hello Misha!');
 });
 
+
 app.post('/upload', function (req, res) {
     var files = req.files.file;
     
@@ -111,12 +112,11 @@ function commonResultHandler( err, res, jacksvar) {
 							' status_code='+res.results[i].status_code +
 							' error = '+res.results[i]["result"]["error"] )
 					}
-          console.log(dict);
-          var returns = JSON.stringify(dict);
-          jacksvar.write(returns);
-          jacksvar.end();
-
 				}
+        console.log(dict);
+        var returns = JSON.stringify(dict);
+        jacksvar.write(returns);
+        jacksvar.end();
 			}
 	}
 }
