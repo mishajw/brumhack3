@@ -73,7 +73,15 @@ var graph = new (function Graph() {
     }
     
     function getActualSize(d) {
-        return 20 + mmSize.getScaledValue(d.size) * 70;
+        var base = 20.0;
+        var scale = 90.0;
+        var idealAmount = 50.0;
+        var relativeSale = 1; // parseFloat(idealAmount / words.length);
+        
+        var size = base +
+            (parseFloat(mmSize.getScaledValue(d.size)) * scale * relativeSale);
+        
+        return size;
     }
 })();
 
