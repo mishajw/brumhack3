@@ -1,4 +1,4 @@
-/<!DOCTYPE html>
+!DOCTYPE html>
 <html>
 	<head>
     <title>Clarafai Wordcloud</title>
@@ -17,18 +17,22 @@
         <script src="js/helperfunctions.js"></script>
         <script src="js/minmax.js"></script>
         
-<!--
-        <script src="js/jquery.filedrop.js"</script>
-        <script src="js/drop.js"></script>
--->
-        
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
     
-    <body onload="graph.init()">
+    <body>
         <div id="word-cloud"></div>
-        
-        <form action="php/imageUP.php" class="dropzone" id="image-upload"></form>
+        <div id="setup-container">
+            <div id="image-upload-container">
+                <form
+                      action="localhost:3000/upload"
+                      class="dropzone"
+                      id="image-upload"
+                      method="post"
+                      enctype="multipart/form-data"></form>
+            </div>
+            <button id="generate-button" onclick="initGraphWithData();">Generate</button>
+        </div>
 	</body>
 </html>
