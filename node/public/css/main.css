@@ -5,36 +5,24 @@
     display: none;
 }
 
-#image-upload-container {
-    border: 1px solid black;
-    margin: 0 auto;
-    width: 90%;
-    padding: 30px;
-    
-    font-size: 200%;
-}
-
-#image-upload {
-    margin: auto;
-}
-
 #setup-container {
-    margin: auto;
-    width: 40%;
+    width: 300px;
+    height: 300px;
     
     text-align: center;
+    
+    width: 500px;
+    height: 100px;
+    padding: 20px;
 }
 
-#generate-button {
-    font-size: 150%;
-    
-    background: #333;
-    color: white;
-    
-    border: 1px solid black;
-    border-radius: 5px;
-    
-    margin: 20px auto;
+#setup-container, setup-container > div {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 #loading-container {
@@ -46,4 +34,54 @@
     font-size: 300%;
     
     text-align: center;
+}
+
+* {
+    font-family: Arial;
+    color: #333;
+}
+
+.setup-type {
+    display: none;
+}
+
+#main-title {
+    font-size: 300%;
+    color: #555;
+    
+    border-bottom: 1px solid #333;
+    
+    text-transform: lowercase;
+}
+
+#main-title span {
+    color: #37b0e9;
+}
+
+#main-desc {
+    font-size: 80%;
+    color: #555;
+    
+    text-transform: lowercase;
+    margin-top: 5px;
+}
+
+#setup-container input, #setup-container button {
+    font-size: 200%;
+}
+
+#back-button {
+    display: none;
+    
+    font-size: 80% !important;
+    margin-top: 30px;
+}
+
+#setup-chooser button {
+    margin: 0 5px;
+    
+    font-size: 400%;
+    
+    width: 100px;
+    height: 100px;
 }

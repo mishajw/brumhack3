@@ -11,6 +11,7 @@
         
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         
         <script>
             function showLoading() {
@@ -18,31 +19,81 @@
                 $("#loading-container").show();
             }
             
+            function setup() {
+                setupUploadButton();
+                setupChooserButton();
+            }
+            
             function setupUploadButton() {
                 var oldClick = $("#upload-button").click;
 
                 $("#upload-button").click(function() {
-//                    alert("Hijacked upload");
                     showLoading();
-//                    oldClick();
                 });
+            }
+            
+            function setupChooserButton() {
+                $("#setup-chooser > button").each(function(d) {
+                    var $this = $(this);
+                    $this.click(function() {
+                        var setupSect = $this.attr("id").split("-")[1];
+                        $("#setup-" + setupSect).fadeIn(500);
+                        $("#back-button").fadeIn(500);
+                        $("#setup-chooser").hide();
+                    });
+                }) 
+            }
+            
+            function resetButtons() {
+                $("#setup-chooser").fadeIn(500);
+                $(".setup-type").hide();
+                $("#back-button").hide();
             }
         </script>
 	</head>
     
-    <body onload="setupUploadButton();">
+    <body onload="setup();">
+        <div id="main-title">The <span>Clarifai</span> Wordcloud</div>
+        <div id="main-desc">By Misha, Jack, and Dan for Brumhack3</div>
+        
         <div id="setup-container">
-            <div id="image-upload-container">
-                <form method="post"
-                      action="/upload"
-                      id="old-example"
-                      enctype="multipart/form-data">
-                    <input name="file" type="file" multiple />
-                    <button id="upload-button">Save</button>
-                </form>
-                
-                <script src="/dropzone/downloads/dropzone.js"></script>
+            <div id="setup-chooser">
+                <button id="choose-files"><i class="fa fa-file-image-o"></i></button>
+                <button id="choose-domain"><i class="fa fa-globe"></i></button>
+                <button id="choose-twitter"><i class="fa fa-twitter"></i></button>
             </div>
+            
+            <div id="setup-files" class="setup-type">
+                <div id="image-upload-container">
+                    <form method="post"
+                          action="/upload"
+                          id="old-example"
+                          enctype="multipart/form-data">
+                        <input name="file" type="file" multiple />
+                        <button id="upload-button">Save</button>
+                    </form>
+
+                    <script src="/dropzone/downloads/dropzone.js"></script>
+                </div>
+            </div>
+            
+            <div id="setup-domain" class="setup-type">
+                <form action="/domain">
+                    <input type="text" placeholder="Enter a domain"/>
+                    <button><i class="fa fa-play-circle"></i></button>
+                </form>
+            </div>
+            
+            <div id="setup-twitter" class="setup-type">
+                <form action="/twitter">
+                    <input type="text" placeholder="Enter a hashtag"/>
+                    <button><i class="fa fa-play-circle"></i></button>
+                </form>
+            </div>
+            
+            <button id="back-button" onclick="resetButtons();">
+                <i class="fa fa-hand-o-left"></i>
+            </button>
         </div>
         
         <div id="loading-container">
@@ -50,3 +101,4 @@
         </div>
 	</body>
 </html>
+2

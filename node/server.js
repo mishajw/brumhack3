@@ -36,9 +36,11 @@ app.post('/upload', function (req, res) {
     }
     
     res.writeHead(302, {
-      'Location': 'results.html'
-      //add other headers here...
+      'Location': 'results.html',
+        data: {  "hello" : "world" }
     });
+    
+//    res.redirect(307, "results.html")
     
     res.end();
 });
