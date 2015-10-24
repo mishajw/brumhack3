@@ -1,10 +1,15 @@
-var express = require('express');
-var multer = require('multer');
-var upload = multer({ dest: "uploads/" });
-var app = express();
+var express = require('express'),
+    path = require('path'),
+    multer = require('multer'),
+    bodyParser = require('body-parser'),
+    app = express();
 
 
-// app.use(multer());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(multer({dest: 'uploads'})); // dest is not necessary if you are happy with the default: /tmp
+app.use(express.static(path.join(__dirname, 'bower_components')));
+
+//// app.use(multer());
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
@@ -15,8 +20,18 @@ app.get('/misha', function (req, res) {
   res.send('Hello Misha!');
 });
 
-app.post('/upload', upload.single("file"), function (req, res) {
-  console.log(req.files);
+app.post('/upload', function (req, res) {
+    var files = req.files.file;
+    
+    if (Array.isArray(files)) {
+        // response with multiple files (old form may send multiple files)
+        console.log("Got " + files.length + " files");
+    } else {
+        // dropzone will send multiple requests per default
+        console.log("Got one file");
+    }
+    
+    res.sendStatus(200);
 });
 
 var server = app.listen(3000, function () {

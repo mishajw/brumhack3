@@ -17,24 +17,17 @@
         <script src="js/helperfunctions.js"></script>
         <script src="js/minmax.js"></script>
         
-<!--
-        <script src="js/jquery.filedrop.js"</script>
-        <script src="js/drop.js"></script>
--->
-        
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
     
-    <body onload="graph.init()">
+    <body>
         <div id="word-cloud"></div>
-        
-        <form action="/upload"
-              method="post"
-              enctype="multipart/form-data"
-              class="dropzone"
-              id="image-upload">
-          <input type="file" name="displayImage"/>
-        </form>
+        <div id="setup-container">
+            <div id="image-upload-container">
+                <form method="post" action="/upload" id="old-example" enctype="multipart/form-data"><input name="file" type="file" multiple /><button>Save</button></form>
+                <script src="/dropzone/downloads/dropzone.js"></script>
+            </div>
+        </div>
 	</body>
 </html>
