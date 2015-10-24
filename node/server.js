@@ -114,9 +114,11 @@ function commonResultHandler( err, res, jacksvar) {
           console.log(dict);
           var returns = JSON.stringify(dict);
           jacksvar.writeHead(302, {
-            'Location': 'results.html'
+            'Location': 'result.html'
           });
+          jacksvar.write("<hereyougo>");
           jacksvar.write(returns);
+          jacksvar.write("</hereyougo>");
           jacksvar.end();
 
 				}
