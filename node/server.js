@@ -132,7 +132,7 @@ function commonResultHandler( err, res, jacksvar) {
             var stuff = data.replace("JSONDATA", returns);
               console.log(stuff);
               console.log(data);
-            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
+//            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
             jacksvar.write(stuff);
             jacksvar.end();
           } else {
