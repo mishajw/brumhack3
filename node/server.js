@@ -37,11 +37,11 @@ app.post('/upload', function (req, res) {
         files = [files];
     }
     
-    res.writeHead(302, {
-      'Location': 'results.html',
-        data: {  "hello" : "world" }
-    });
-    
+//    res.writeHead(302, {
+//      'Location': 'results.html',
+//        data: {  "hello" : "world" }
+//    });
+//    
 //    res.redirect(307, "results.html")
     
     res.end();
@@ -132,7 +132,7 @@ function commonResultHandler( err, res, jacksvar) {
             var stuff = data.replace("JSONDATA", returns);
               console.log(stuff);
               console.log(data);
-//            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
+            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
             jacksvar.write(stuff);
             jacksvar.end();
           } else {
