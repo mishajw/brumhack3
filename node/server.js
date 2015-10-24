@@ -36,15 +36,6 @@ app.post('/upload', function (req, res) {
         console.log("Got one file");
         files = [files];
     }
-    
-//    res.writeHead(302, {
-//      'Location': 'results.html',
-//        data: {  "hello" : "world" }
-//    });
-//    
-//    res.redirect(307, "results.html")
-    
-    res.end();
     console.log(files);
     var qualifier = "http://52.30.124.205:3000/uploads/"
     var urls = [];
@@ -55,6 +46,7 @@ app.post('/upload', function (req, res) {
     clarifai.tagURL( urls, files, function(err, ai) {
       return commonResultHandler(err, ai, res);
     });
+
 });
 
 var server = app.listen(3000, function () {
@@ -124,19 +116,20 @@ function commonResultHandler( err, res, jacksvar) {
 
         console.log(dict);
         var returns = JSON.stringify(dict);
-                
+        /*jacksvar.write(returns);
+        jacksvar.end();*/
         var filePath = "public/results.html";
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
           if(!err){
-            var stuff = data.replace("JSONDATA", returns);
-						jacksvar.writeHead(200, {'Content-Type': 'text/html','Content-Length': stuff.length});
+            stuff = data.replace("<json></json>", "<json>" + returns + "</json>");
+            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
             jacksvar.write(stuff);
             jacksvar.end();
           } else {
             console.log(err);
           }
         });
-        }
+			}
 	}
 }
 
