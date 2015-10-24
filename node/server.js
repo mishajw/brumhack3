@@ -121,7 +121,7 @@ function commonResultHandler( err, res, jacksvar) {
         var filePath = "public/results.html";
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
           if(!err){
-            stuff = data.replace("<json></json>", "<json>" + returns + "</json>");
+            stuff = data.replace("JSONDATA", returns);
             jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
             jacksvar.write(stuff);
             jacksvar.end();
