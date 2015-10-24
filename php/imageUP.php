@@ -10,9 +10,9 @@
     $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
     
       
-    move_uploaded_file($file_tmp,"images/".$file_name);
+    move_uploaded_file($file_tmp,"/images/".$file_name);
 	
-	echo $_SERVER['SERVER_NAME']."images/".$file_name;
+	echo $_SERVER['SERVER_NAME']."/images/".$file_name;
    }
    else
    {
