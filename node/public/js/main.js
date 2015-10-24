@@ -109,19 +109,24 @@ function displayGraph() {
 }
 
 function initGraphWithData() {
-    $.ajax({
-        url: "/get",
-        dataType: "json",
-        success: function(resp) {
-            var data = $.parseJSON(resp.responseText)
-            
-            console.log("Got from server: " + data);
-            
-            graph.init(data);
-        },
-        error: function(error) {
-            console.log("Got error: " + error);
-            graph.init();
-        }
-    })
+    console.log(data)
+    var jsonData = $.parseJSON(data);
+    console.log(jsonData);
+    
+    var justWords = [];
+    for (var k in jsonData) { justWords.push(k); }
+    
+    console.log(justWords);
+    
+    var finalData = [];
+    for (var i = 0; i < justWords.length; i++) {
+        finalData.push({
+            text: justWords[i],
+            size: jsonData[justWords[i]]
+        });
+    }
+    
+    console.log(finalData);
+    
+    graph.init(finalData);
 }
