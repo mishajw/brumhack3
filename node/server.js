@@ -116,9 +116,9 @@ function commonResultHandler( err, res, jacksvar) {
 
         console.log(dict);
         var returns = JSON.stringify(dict);
-        jacksvar.write(returns);
-        jacksvar.end();
-
+        /*jacksvar.write(returns);
+        jacksvar.end();*/
+        var filePath = "/public/results.html";
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
           if(!err){
             stuff = data.replace("<json></json>", "<json>" + returns + "</json>");
