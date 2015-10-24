@@ -14,10 +14,15 @@ var graph = new (function Graph() {
     this.init = function(_words) {
         words = _words;
         
+        displayGraph();
+        
         // Setup elements
         container = d3.select("#word-cloud")
         svg = container.append("svg");
         fill = d3.scale.category20();
+        
+        // Show the graph
+        container.style("diplay", "block");
         
         // Set dimensions to fit to containing div
         width = pxStringToInt(container.style("width"));
@@ -25,9 +30,8 @@ var graph = new (function Graph() {
         
         // If no words passed in, give template
         if (!words) {
-            console.log("Nothing passed in, using Shakespeare");
-            words = "Shall I compare thee to a summer's day? Thou art more lovely and more temperate: Rough winds do shake the darling buds of May, And summer's lease hath all too short a date"
-                .split(" ")
+            console.log("Nothing passed in");
+            words = Array(404).join("error ").split(" ")
                 .map(function(d) {
                     return {
                         text: d,
@@ -98,3 +102,26 @@ var testWords = [{
     text: "jack",
     size: "10"
 }]
+
+function displayGraph() {
+    $("#word-cloud").show();
+    $("#setup-container").hide();
+}
+
+function initGraphWithData() {
+    $.ajax({
+        url: "/get",
+        dataType: "json",
+        success: function(resp) {
+            var data = $.parseJSON(resp.responseText)
+            
+            console.log("Got from server: " + data);
+            
+            graph.init(data);
+        },
+        error: function(error) {
+            console.log("Got error: " + error);
+            graph.init();
+        }
+    })
+}
