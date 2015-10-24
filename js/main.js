@@ -9,7 +9,7 @@ var graph = new (function Graph() {
     
     // D3 elements
     var svg, container;
-    var fill = d3.scale.category20();
+    var fill;
     
     this.init = function(_words) {
         words = _words;
@@ -17,6 +17,7 @@ var graph = new (function Graph() {
         // Setup elements
         container = d3.select("#word-cloud")
         svg = container.append("svg");
+        fill = d3.scale.category20();
         
         // Set dimensions to fit to containing div
         width = pxStringToInt(container.style("width"));
@@ -24,7 +25,7 @@ var graph = new (function Graph() {
         
         // If no words passed in, give template
         if (!words) {
-            console.log("Nothing passed in, using Shakespear");
+            console.log("Nothing passed in, using Shakespeare");
             words = "Shall I compare thee to a summer's day? Thou art more lovely and more temperate: Rough winds do shake the darling buds of May, And summer's lease hath all too short a date"
                 .split(" ")
                 .map(function(d) {
