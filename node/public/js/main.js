@@ -109,20 +109,14 @@ function displayGraph() {
 }
 
 function initGraphWithData() {
-    console.log(data)
-    var jsonData = $.parseJSON(data);
-    console.log(jsonData);
-    
     var justWords = [];
-    for (var k in jsonData) { justWords.push(k); }
-    
-    console.log(justWords);
+    for (var k in data) { justWords.push(k); }
     
     var finalData = [];
     for (var i = 0; i < justWords.length; i++) {
         finalData.push({
             text: justWords[i],
-            size: jsonData[justWords[i]]
+            size: data[justWords[i]]
         });
     }
     
