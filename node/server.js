@@ -129,7 +129,7 @@ function commonResultHandler( err, res, jacksvar) {
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
           if(!err){
               console.log(data);
-            var stuff = data.replace("!DATA!", returns);
+            var stuff = data.replace("!DATA!", "\"" + returns + "\"");
               console.log(data);
 //            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
             jacksvar.write(stuff);
