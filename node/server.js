@@ -35,11 +35,12 @@ app.post('/upload', function (req, res) {
         console.log("Got one file");
         files = [files];
     }
-    
+    console.log(files);
     var qualifier = "http://52.30.124.205:3000/uploads/"
     var urls = [];
     for(i = 0; i < files.length; i++){
-      urls[i] = qualifier.concat(files[i]);
+      urls[i] = qualifier.concat(files[i].name);
+      console.log(urls[i]);
     }
     clarifai.tagURL( urls, files, function(err, ai) {
       return commonResultHandler(err, ai, res);
