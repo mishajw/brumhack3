@@ -129,9 +129,9 @@ function commonResultHandler( err, res, jacksvar) {
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
           if(!err){
             var stuff = data.replace("JSONDATA", returns);
-//            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
-            jacksvar.send(stuff);
-//            jacksvar.end();
+						jacksvar.writeHead(200, {'Content-Type': 'text/html','Content-Length': stuff.length});
+            jacksvar.write(stuff);
+            jacksvar.end();
           } else {
             console.log(err);
           }
