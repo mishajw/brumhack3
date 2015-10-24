@@ -2,6 +2,7 @@ var express = require('express'),
     path = require('path'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
+    fs = require('fs'),
     app = express();
 
 var clarifai = require('./clarifai_node.js');
@@ -27,7 +28,6 @@ app.get('/misha', function (req, res) {
 
 app.post('/upload', function (req, res) {
     var files = req.files.file;
-    
     if (Array.isArray(files)) {
         // response with multiple files (old form may send multiple files)
         console.log("Got " + files.length + " files");
@@ -113,10 +113,22 @@ function commonResultHandler( err, res, jacksvar) {
 							' error = '+res.results[i]["result"]["error"] )
 					}
 				}
+
         console.log(dict);
         var returns = JSON.stringify(dict);
         jacksvar.write(returns);
         jacksvar.end();
+
+        fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
+          if(!err){
+            stuff = data.replace("<json></json>", "<json>" + returns + "</json>");
+            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
+            jacksvar.write(stuff);
+            jacksvar.end();
+          } else {
+            console.log(err);
+          }
+        });
 			}
 	}
 }
