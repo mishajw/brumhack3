@@ -12,7 +12,7 @@ clarifai.initAPI("uQeWKJLNIt1rz8NeDRHfUb6KNQZPlKenjb_xpafq", "1CUq98b72stAyNL262
 //tagMultipleURL(["https://dianakhayyat.files.wordpress.com/2011/05/animals_cats_small_cat_005241_.jpg","http://4hdwall.com/wp-content/uploads/2012/05/cute-cat-wallpapers.jpg"],["kitty","cat"]);
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(multer({dest: 'uploads'})); // dest is not necessary if you are happy with the default: /tmp
+app.use(multer({dest: 'public/uploads'})); // dest is not necessary if you are happy with the default: /tmp
 app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(express.static('public'));
 
