@@ -3,13 +3,12 @@ var express = require('express'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
     app = express();
-
 var clarifai = require('./clarifai_node.js');
 var stdio = require('stdio');
 
 clarifai.initAPI("uQeWKJLNIt1rz8NeDRHfUb6KNQZPlKenjb_xpafq", "1CUq98b72stAyNL262wsqIj5ICuaxIU4FY7sAH1d" );
 
-//tagMultipleURL(["https://dianakhayyat.files.wordpress.com/2011/05/animals_cats_small_cat_005241_.jpg","http://4hdwall.com/wp-content/uploads/2012/05/cute-cat-wallpapers.jpg"],["kitty","cat"]);
+tagMultipleURL(["https://dianakhayyat.files.wordpress.com/2011/05/animals_cats_small_cat_005241_.jpg","http://4hdwall.com/wp-content/uploads/2012/05/cute-cat-wallpapers.jpg"],["kitty","cat"]);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(multer({dest: 'uploads'})); // dest is not necessary if you are happy with the default: /tmp
@@ -33,25 +32,20 @@ app.post('/upload', function (req, res) {
     } else {
         // dropzone will send multiple requests per default
         console.log("Got one file");
-        files = [files];
     }
-    
-    var qualifier = "http://52.30.124.205:3000/uploads/"
-    var urls = [];
-    for(i = 0; i < files.length; i++){
-      urls[i] = qualifier.concat(files[i]);
-    }
-    clarifai.tagURL( urls, files, function(err, ai) {
-      return commonResultHandler(err, ai, res);
-    });
 
+    res.writeHead(302, {
+      'location': 'results.html'
+    });
+    
+    res.end();
 });
 
 var server = app.listen(3000, function () {
-    var host = server.address().address;
-    var port = server.address().port;
-    
-    console.log('Example app listening at http://%s:%s', host, port);
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('Example app listening at http://%s:%s', host, port);
 });
 
 // CLARIFAI
@@ -60,7 +54,7 @@ clarifai.setThrottleHandler( function( bThrottled, waitSeconds ) {
 	console.log( bThrottled ? ["throttled. service available again in",waitSeconds,"seconds"].join(' ') : "not throttled");
 });
 
-function commonResultHandler( err, res, jacksvar) {
+function commonResultHandler( err, res ) {
 	if( err != null ) {
 		if( typeof err["status_code"] === "string" && err["status_code"] === "TIMEOUT") {
 			console.log("TAG request timed out");
@@ -111,14 +105,6 @@ function commonResultHandler( err, res, jacksvar) {
 							' error = '+res.results[i]["result"]["error"] )
 					}
           console.log(dict);
-          var returns = dict.stringify();
-          jacksvar.writeHead(302, {
-            'Location': 'results.html',
-            //add other headers here...
-            "data": returns
-          });
-          jacksvar.end();
-
 				}
 			}
 	}
@@ -126,5 +112,5 @@ function commonResultHandler( err, res, jacksvar) {
 
 // exampleTagMultipleURL() shows how to request the tags for multiple images URLs
 function tagMultipleURL(testImageURLs, ourIds) {
-  clarifai.tagURL( testImageURLs , ourIds, commonResultHandler );
+  clarifai.tagURL( testImageURLs , ourIds, commonResultHandler ); 
 }
