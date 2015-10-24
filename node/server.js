@@ -3,11 +3,9 @@ var express = require('express'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
     app = express();
-<<<<<<< HEAD
-=======
+
 var clarifai = require('./clarifai_node.js');
 var stdio = require('stdio');
->>>>>>> abb230bc9bd217fbed8c621485e3be212c12432b
 
 clarifai.initAPI("uQeWKJLNIt1rz8NeDRHfUb6KNQZPlKenjb_xpafq", "1CUq98b72stAyNL262wsqIj5ICuaxIU4FY7sAH1d" );
 
