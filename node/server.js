@@ -8,7 +8,7 @@ var stdio = require('stdio');
 
 clarifai.initAPI("uQeWKJLNIt1rz8NeDRHfUb6KNQZPlKenjb_xpafq", "1CUq98b72stAyNL262wsqIj5ICuaxIU4FY7sAH1d" );
 
-tagMultipleURL(["https://dianakhayyat.files.wordpress.com/2011/05/animals_cats_small_cat_005241_.jpg"],["kitty"]);
+tagMultipleURL(["https://dianakhayyat.files.wordpress.com/2011/05/animals_cats_small_cat_005241_.jpg","http://4hdwall.com/wp-content/uploads/2012/05/cute-cat-wallpapers.jpg"],["kitty","cat"]);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(multer({dest: 'uploads'})); // dest is not necessary if you are happy with the default: /tmp
@@ -77,13 +77,22 @@ function commonResultHandler( err, res ) {
 			// successfully tagged.
 			if( typeof res["status_code"] === "string" && 
 				( res["status_code"] === "OK" || res["status_code"] === "PARTIAL_ERROR" )) {
-
+        
+        var dict = {};
 				// the request completed successfully
 				for( i = 0; i < res.results.length; i++ ) {
 					if( res["results"][i]["status_code"] === "OK" ) {
 						console.log( 'docid='+res.results[i].docid +
 							' local_id='+res.results[i].local_id +
 							' tags='+res["results"][i].result["tag"]["classes"] )
+            for( j = 0; j < res.results[i].result.tag.classes.length; j++){
+              name = res.results[i].result.tag.classes[j];
+              if (name in dict) {
+                dict[name]++;
+              } else {
+                dict[name] = 1;
+              }
+            }
 					}
 					else {
 						console.log( 'docid='+res.results[i].docid +
@@ -91,6 +100,7 @@ function commonResultHandler( err, res ) {
 							' status_code='+res.results[i].status_code +
 							' error = '+res.results[i]["result"]["error"] )
 					}
+          console.log(dict);
 				}
 			}
 	}
