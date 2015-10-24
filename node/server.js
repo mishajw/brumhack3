@@ -3,6 +3,7 @@ var express = require('express'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
     app = express();
+
 var clarifai = require('./clarifai_node.js');
 var stdio = require('stdio');
 
@@ -34,14 +35,19 @@ app.post('/upload', function (req, res) {
         console.log("Got one file");
     }
     
-    res.sendStatus(200);
+    res.writeHead(302, {
+      'Location': 'results.html'
+      //add other headers here...
+    });
+    
+    res.end();
 });
 
 var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Example app listening at http://%s:%s', host, port);
+    var host = server.address().address;
+    var port = server.address().port;
+    
+    console.log('Example app listening at http://%s:%s', host, port);
 });
 
 // CLARIFAI

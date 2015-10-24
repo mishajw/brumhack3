@@ -3,31 +3,50 @@
 	<head>
     <title>Clarafai Wordcloud</title>
     <meta charset="utf-8"/>
-        <!-- Our JS -->
-		<script src="js/main.js"></script>
-        
         <!-- APIs -->
         <script src="js/jquery-2.1.4.min.js"></script>
         <script src="js/d3.min.js"></script>
         <script src="js/d3.layout.cloud.js"></script>
         <script src="js/dropzone.js"></script>
         
-        <!-- Our JS -->
-		<script src="js/main.js"></script>
-        <script src="js/helperfunctions.js"></script>
-        <script src="js/minmax.js"></script>
-        
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        
+        <script>
+            function showLoading() {
+                $("#setup-container").hide();
+                $("#loading-container").show();
+            }
+            
+            function setupUploadButton() {
+                var oldClick = $("#upload-button").click;
+
+                $("#upload-button").click(function() {
+//                    alert("Hijacked upload");
+                    showLoading();
+//                    oldClick();
+                });
+            }
+        </script>
 	</head>
     
-    <body>
-        <div id="word-cloud"></div>
+    <body onload="setupUploadButton();">
         <div id="setup-container">
             <div id="image-upload-container">
-                <form method="post" action="/upload" id="old-example" enctype="multipart/form-data"><input name="file" type="file" multiple /><button>Save</button></form>
+                <form method="post"
+                      action="/upload"
+                      id="old-example"
+                      enctype="multipart/form-data">
+                    <input name="file" type="file" multiple />
+                    <button id="upload-button">Save</button>
+                </form>
+                
                 <script src="/dropzone/downloads/dropzone.js"></script>
             </div>
+        </div>
+        
+        <div id="loading-container">
+            Loading...
         </div>
 	</body>
 </html>
