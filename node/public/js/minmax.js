@@ -6,6 +6,7 @@ function MinMax(dataset, getter) {
     // Set the min and max values.
     for (var i=0; i<dataset.length; i++) {
         curVal = getter(dataset[i]);
+			
         if (curVal > this.max) this.max = curVal;
         if (curVal < this.min) this.min = curVal;
         this.total += curVal;

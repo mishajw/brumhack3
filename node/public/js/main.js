@@ -35,13 +35,13 @@ var graph = new (function Graph() {
                 .map(function(d) {
                     return {
                         text: d,
-                        size: 10 + Math.random() * 100
+                        value: 10 + Math.random() * 100
                     };
                 });
         }
         
         // Setup the scaled sizes
-        mmSize = new MinMax(words, function(d) { return d.size; });
+        mmSize = new MinMax(words, function(d) { return parseInt(d.value); });
         
         // Setup the layout
         var layout = d3.layout.cloud()
@@ -49,7 +49,7 @@ var graph = new (function Graph() {
             .words(words)
             .padding(5)
             .rotate(function(d) {
-                return -45 + mmSize.getScaledValue(d.size) * 90;
+                return -45 + mmSize.getScaledValue(d.value) * 90;
             })
             .font("Impact")
             .fontSize(getActualSize)
@@ -79,13 +79,13 @@ var graph = new (function Graph() {
     
     function getActualSize(d) {
         var base = 20.0;
-        var scale = 90.0;
-        var idealAmount = 50.0;
-        var relativeSale = 1; // parseFloat(idealAmount / words.length);
+        var scale = 70.0;
+//        var idealAmount = 50.0;
+//        var relativeSale = 1; // parseFloat(idealAmount / words.length);
         
         var size = base +
-            (parseFloat(mmSize.getScaledValue(d.size)) * scale * relativeSale);
-        
+            (parseFloat(mmSize.getScaledValue(d.value)) * scale/* * relativeSale*/);
+				
         return size;
     }
 })();
@@ -116,11 +116,9 @@ function initGraphWithData() {
     for (var i = 0; i < justWords.length; i++) {
         finalData.push({
             text: justWords[i],
-            size: data[justWords[i]]
+            value: data[justWords[i]]
         });
     }
-    
-    console.log(finalData);
     
     graph.init(finalData);
 }
