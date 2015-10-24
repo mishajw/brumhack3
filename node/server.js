@@ -24,6 +24,8 @@ app.get('/misha', function (req, res) {
   res.send('Hello Misha!');
 });
 
+app.
+
 app.post('/upload', function (req, res) {
     var files = req.files.file;
     
@@ -114,11 +116,9 @@ function commonResultHandler( err, res, jacksvar) {
           console.log(dict);
           var returns = JSON.stringify(dict);
           jacksvar.writeHead(302, {
-            'Location': 'result.html'
+            'Location': 'result.txt'
           });
-          jacksvar.write("<hereyougo>");
           jacksvar.write(returns);
-          jacksvar.write("</hereyougo>");
           jacksvar.end();
 
 				}
