@@ -1,4 +1,7 @@
 <?php
+
+ header("Access-Control-Allow-Origin: *");
+
 $upload_dir = 'php/images/';
 $allowed_ext = array('jpg','jpeg','png','gif');
 
