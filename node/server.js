@@ -124,20 +124,21 @@ function commonResultHandler( err, res, jacksvar) {
 
         console.log(dict);
         var returns = JSON.stringify(dict);
-        /*jacksvar.write(returns);
-        jacksvar.end();*/
+                
         var filePath = "public/results.html";
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
           if(!err){
-            stuff = data.replace("!DATA!", returns);
-            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
+              console.log(data);
+            var stuff = data.replace("!DATA!", returns);
+              console.log(data);
+//            jacksvar.writeHead(200, {'Content-Type' : 'text/html'});
             jacksvar.write(stuff);
             jacksvar.end();
           } else {
             console.log(err);
           }
         });
-			}
+        }
 	}
 }
 
