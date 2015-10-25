@@ -89,3 +89,45 @@ body, html {
     width: 100px;
     height  : 100px;
 }
+
+#upload-button {
+/*		margin-top: 20px;*/
+}
+
+#file-label {
+		margin-bottom: 10px;
+}
+
+.inputfile {
+		width: 0.1px;
+		height: 0.1px;
+		opacity: 0;
+		overflow: hidden;
+		position: absolute;
+		z-index: -1;
+}
+
+.inputfile + label {
+/*
+    font-size: 1.25em;
+    font-weight: 700;
+*/
+    display: block;
+		
+		padding: 10px;
+		border: 1px solid black;
+		border-radius: 5px;
+		width: 100px;
+		
+		cursor: pointer;
+		margin: auto;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: #37b0e9;
+		color: white;
+}
+
+
+

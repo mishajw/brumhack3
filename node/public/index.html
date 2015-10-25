@@ -60,7 +60,7 @@
             <div id="setup-chooser">
                 <button id="choose-files"><i class="fa fa-file-image-o"></i></button>
                 <button id="choose-domain"><i class="fa fa-globe"></i></button>
-                <button id="choose-twitter"><i class="fa fa-twitter"></i></button>
+                <button id="choose-twitter" disabled><i class="fa fa-twitter"></i></button>
             </div>
             
             <div id="setup-files" class="setup-type">
@@ -68,9 +68,13 @@
                     <form method="post"
                           action="/upload"
                           id="old-example"
-                          enctype="multipart/form-data">
-                        <input name="file" type="file" multiple />
-                        <button id="upload-button">Save</button>
+                          enctype="multipart/form-data"
+													style="padding: 10px;">
+                        <!--<input name="file" type="file" multiple />
+                        -->
+												<input type="file" name="file" id="file" class="inputfile" multiple />
+												<label id="file-label" for="file">Choose a file</label>
+												<button id="upload-button"><i class="fa fa-check-circle"></i></button>
                     </form>
 
                     <script src="/dropzone/downloads/dropzone.js"></script>
@@ -79,14 +83,14 @@
             
             <div id="setup-domain" class="setup-type">
                 <form action="/domain">
-                    <input type="text" placeholder="Enter a domain"/>
+                    <input name="domain" type="text" placeholder="Enter a domain"/>
                     <button><i class="fa fa-play-circle"></i></button>
                 </form>
             </div>
             
             <div id="setup-twitter" class="setup-type">
                 <form action="/twitter">
-                    <input type="text" placeholder="Enter a hashtag"/>
+                    <input name="hashtag" type="text" placeholder="Enter a hashtag"/>
                     <button><i class="fa fa-play-circle"></i></button>
                 </form>
             </div>
