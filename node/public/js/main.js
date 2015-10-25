@@ -49,7 +49,10 @@ var graph = new (function Graph() {
             .words(words)
             .padding(5)
             .rotate(function(d) {
-                return -45 + mmSize.getScaledValue(d.value) * 90;
+//								return (Math.floor(Math.random() * 3) / 3) * 270 - 90;
+								return Math.random() * 90 - 45;
+//                return -45 + mmSize.getScaledValue(d.value) * 90;
+//								return Math.random() * 360;
             })
             .font("Impact")
             .fontSize(getActualSize)
@@ -120,5 +123,10 @@ function initGraphWithData() {
         });
     }
     
+		showTitle(msg);
     graph.init(finalData);
+}
+
+function showTitle(msg) {
+		$("#title").text(msg);
 }
