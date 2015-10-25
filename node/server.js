@@ -51,18 +51,33 @@ app.post('/upload', function (req, res) {
 
 });
 
-app.get('/domain', function(req, res) {
+app.post('/domain', function(req, res) {
   var url = req.body.domain;
   crawl(url, function(pics,myCrawler) {
     myCrawler.stop();
     urls = pics.filter(function(elem, pos,arr) {
       return arr.indexOf(elem) == pos;
-    }); 
+    });
+    console.log("Callback");
+    console.log(pics);
+    console.log(urls);
     clarifai.tagURL( urls, urls, function(err, ai){
       return commonResultHandler(err, ai, res);
     });
   });
 });
+  crawl("google.com", function(pics,myCrawler) {
+    myCrawler.stop();
+    urls = pics.filter(function(elem, pos,arr) {
+      return arr.indexOf(elem) == pos;
+    });
+    console.log("Callback");
+    console.log(pics);
+    console.log(urls);
+    clarifai.tagURL( urls, urls, function(err, ai){
+      return commonResultHandler(err, ai, res);
+    });
+  });
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
@@ -156,6 +171,9 @@ function tagMultipleURL(testImageURLs, ourIds) {
 // Crawler
 
 function crawl(domain, f) {
+  console.log(domain);
+  console.log("starting crawler");
+  
   var myCrawler = new crawler(domain);
   
   myCrawler.initialPath = "/";
@@ -166,14 +184,17 @@ function crawl(domain, f) {
 
   var pics = [];
 
-  myCrawler.maxDepth = 5;
+  myCrawler.maxDepth = 3;
   try{
     var x = myCrawler.on("fetchcomplete", function(queueItem, responseBuffer, response) {
+      console.log("fetch complete");
+      
       var html = responseBuffer.toString();
       jsdom.env(
           html,
           ["http://code.jquery.com/jquery.js"],
           function (err, window) {
+            console.log("Parsed html");
             var $ = window.$;
             var images = $("img").map(function (){
               var img = this.src;
@@ -184,7 +205,8 @@ function crawl(domain, f) {
                 img = myCrawler.initialProtocol + "://" + domain + img;
               }
               if(this.src != "x"){
-               pics.push(img);
+                console.log("image");
+                pics.push(img);
               }
             });
           });
@@ -194,9 +216,9 @@ function crawl(domain, f) {
     catch (e) {
       console.log("Sensible error message");
     }
-  setTimeout(function() {
-    f(pics, myCrawler)
-  }, 10000);
+   setTimeout(function() {
+     f(pics, myCrawler);
+   }, 10000);
 }
 
 
