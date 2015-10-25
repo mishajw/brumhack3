@@ -106,7 +106,7 @@ function initGraphWithData() {
 				graph.init();
 				return;
 		}
-		var blackList = ["computer graphic", "symbol", "vector", "illustration"]
+		var blackList = ["computer graphic", "symbol", "vector", "illustration", "desktop"]
 		
     var justWords = [];
     for (var k in data) {
