@@ -3,6 +3,8 @@ var express = require('express'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
+    crawler = require("simplecrawler"),
+    jsdom = require("jsdom"),
     app = express();
 
 var clarifai = require('./clarifai_node.js');
@@ -47,6 +49,19 @@ app.post('/upload', function (req, res) {
       return commonResultHandler(err, ai, res);
     });
 
+});
+
+app.post('/domain', function(req, res) {
+  var url = req.body.domain;
+  crawl(url, function(pics,myCrawler) {
+    myCrawler.stop();
+    urls = pics.filter(function(elem, pos,arr) {
+      return arr.indexOf(elem) == pos;
+    }); 
+    clarifai.tagURL( urls, urls, function(err, ai){
+      return commonResultHandler(err, ai, res);
+    });
+  });
 });
 
 var server = app.listen(3000, function () {
@@ -137,3 +152,52 @@ function commonResultHandler( err, res, jacksvar) {
 function tagMultipleURL(testImageURLs, ourIds) {
   clarifai.tagURL( testImageURLs , ourIds, commonResultHandler );
 }
+
+// Crawler
+
+function crawl(domain) {
+  var myCrawler = new crawler(domain);
+  
+  myCrawler.initialPath = "/";
+  myCrawler.initialProtocol = "https";
+
+  myCrawler.interval = 25;
+  myCrawler.maxConcurrency = 5;
+
+  var pics = [];
+
+  myCrawler.maxDepth = 5;
+  try{
+    var x = myCrawler.on("fetchcomplete", function(queueItem, responseBuffer, response) {
+      var html = responseBuffer.toString();
+      jsdom.env(
+          html,
+          ["http://code.jquery.com/jquery.js"],
+          function (err, window) {
+            var $ = window.$;
+            var images = $("img").map(function (){
+              var img = this.src;
+              if(img.substring(0,2) == "//"){
+                img = myCrawler.initialProtocol + ":" + img;
+              }
+              if(img.substring(0,1) == "/"){
+                img = myCrawler.initialProtocol + "://" + domain + img;
+              }
+              if(this.src != "x"){
+               pics.push(img);
+              }
+            });
+          });
+        });
+      myCrawler.start();
+    }
+    catch (e) {
+      console.log("Sensible error message");
+    }
+  setTimeout(function() {
+    console.log(pics);
+    myCrawler.stop()
+  }, 10000);
+}
+
+
