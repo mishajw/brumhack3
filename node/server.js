@@ -46,7 +46,7 @@ app.post('/upload', function (req, res) {
       console.log(urls[i]);
     }
     clarifai.tagURL( urls, files, function(err, ai) {
-      return commonResultHandler(err, ai, res, "Your Files");
+      return commonResultHandler(err, ai, res, "Your Files", urls);
     });
 
 });
@@ -76,7 +76,7 @@ app.post('/domain', function(req, res) {
     console.log(pics);
     console.log(urls);
     clarifai.tagURL( urls, urls, function(err, ai){
-      return commonResultHandler(err, ai, res, msg);
+      return commonResultHandler(err, ai, res, msg, urls);
     });
   });
 });
@@ -94,7 +94,7 @@ clarifai.setThrottleHandler( function( bThrottled, waitSeconds ) {
 	console.log( bThrottled ? ["throttled. service available again in",waitSeconds,"seconds"].join(' ') : "not throttled");
 });
 
-function commonResultHandler( err, res, jacksvar, msg) {
+function commonResultHandler( err, res, jacksvar, msg, urls) {
 	if( err != null ) {
 		if( typeof err["status_code"] === "string" && err["status_code"] === "TIMEOUT") {
 			console.log("TAG request timed out");
@@ -153,7 +153,7 @@ function commonResultHandler( err, res, jacksvar, msg) {
 				}
 
         console.log(dict);
-        var returns = JSON.stringify({ msg: msg, data: dict });
+        var returns = JSON.stringify({ msg: msg, data: dict, urls: urls});
         /*jacksvar.write(returns);
         jacksvar.end();*/
         var filePath = "public/results.html";
@@ -207,11 +207,10 @@ function crawl(url, f) {
   myCrawler.initialProtocol = proto;
 
   myCrawler.interval = 25;
-  myCrawler.maxConcurrency = domain == "twitter.com" || domain == "www.twitter.com" ? 1 : 3;
-
+  myCrawler.maxConcurrency = 3;
   var pics = [];
 
-  myCrawler.maxDepth = 3;
+  myCrawler.maxDepth = domain == "twitter.com" || domain == "www.twitter.com" ? 3 : 3;
   try{
     var x = myCrawler.on("fetchcomplete", function(queueItem, responseBuffer, response) {
       console.log("fetch complete");

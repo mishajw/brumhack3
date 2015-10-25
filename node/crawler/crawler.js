@@ -61,4 +61,4 @@ function crawl(domain) {
 	//myCrawler.stop();
 }
 
-crawl("google.co.uk");
+crawl("www.clarifai.com");
