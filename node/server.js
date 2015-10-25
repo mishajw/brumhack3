@@ -89,7 +89,8 @@ function commonResultHandler( err, res, jacksvar) {
 			console.log(err);
 		}
 		else if( typeof err["status_code"] === "string" && err["status_code"] === "ALL_ERROR") {
-			console.log("TAG request received ALL_ERROR. Contact Clarifai support if it continues.");				
+			console.log("TAG request received ALL_ERROR. Contact Clarifai support if it continues.");		
+			console.log(err);
 		}
 		else if( typeof err["status_code"] === "string" && err["status_code"] === "TOKEN_FAILURE") {
 			console.log("TAG request received TOKEN_FAILURE. Contact Clarifai support if it continues.");				
@@ -161,17 +162,37 @@ function tagMultipleURL(testImageURLs, ourIds) {
 
 // Crawler
 
-function crawl(domain, f) {
-  console.log(domain);
+function crawl(url, f) {
+  console.log(url);
   console.log("starting crawler");
   
-  var myCrawler = new crawler(domain);
+	var protoSplit = url.split("://");
+	
+	var proto, domain, path, location;
+	
+	if (protoSplit.length == 2) {
+		proto = protoSplit[0];
+		location = protoSplit[1];
+	} else {
+		proto = "http";
+		location = url;
+	}
+	
+	console.log(proto);
+	console.log(location);
+	
+	domain = location.split("/")[0];
+	console.log(domain);
+	path = location.substr(domain.length, location.length);
+	console.log(path);
+	
+  var myCrawler = new crawler(domain, path);
   
-  myCrawler.initialPath = "/";
-  myCrawler.initialProtocol = "http";
+  /*myCrawler.initialPath = "/";*/
+  myCrawler.initialProtocol = proto;
 
   myCrawler.interval = 25;
-  myCrawler.maxConcurrency = 1;
+  myCrawler.maxConcurrency = domain == "twitter.com" || domain == "www.twitter.com" ? 1 : 3;
 
   var pics = [];
 
@@ -190,9 +211,10 @@ function crawl(domain, f) {
             var images = $("img").map(function (){
               var img = this.src;
 							
-							if (img.indexOf(".jpg") == -1) {
+							if (img.indexOf(".jpg") == -1 && img.indexOf(".png") == -1) {
 								return;
 							}
+							
 							
               if(img.substring(0,2) == "//"){
                 img = myCrawler.initialProtocol + ":" + img;
@@ -200,6 +222,9 @@ function crawl(domain, f) {
               if(img.substring(0,1) == "/"){
                 img = myCrawler.initialProtocol + "://" + domain + img;
               }
+							if (img.split("/")[0].indexOf(".") == -1 && img.split("/")[0].indexOf(":") == -1) {
+								img = myCrawler.initialProtocol + "://" + domain + "/" + img;
+							}
               if(this.src != "x"){
                 console.log("image");
                 pics.push(img);
@@ -214,7 +239,7 @@ function crawl(domain, f) {
     }
    setTimeout(function() {
      f(pics, myCrawler);
-   }, 10000);
+   }, 1000);
 }
 
 
