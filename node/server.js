@@ -55,9 +55,11 @@ app.post('/domain', function(req, res) {
   var url = req.body.domain;
   crawl(url, function(pics,myCrawler) {
     myCrawler.stop();
+		pics = pics.slice(0, 20);
     urls = pics.filter(function(elem, pos,arr) {
       return arr.indexOf(elem) == pos;
     });
+		
     console.log("Callback");
     console.log(pics);
     console.log(urls);
@@ -66,18 +68,6 @@ app.post('/domain', function(req, res) {
     });
   });
 });
-//	crawl("google.com", function(pics,myCrawler) {
-//		myCrawler.stop();
-//		urls = pics.filter(function(elem, pos,arr) {
-//			return arr.indexOf(elem) == pos;
-//		});
-//		console.log("Callback");
-//		console.log(pics);
-//		console.log(urls);
-//		clarifai.tagURL( urls, urls, function(err, ai){
-//			return commonResultHandler(err, ai, res);
-//		});
-//	});
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
@@ -96,6 +86,7 @@ function commonResultHandler( err, res, jacksvar) {
 	if( err != null ) {
 		if( typeof err["status_code"] === "string" && err["status_code"] === "TIMEOUT") {
 			console.log("TAG request timed out");
+			console.log(err);
 		}
 		else if( typeof err["status_code"] === "string" && err["status_code"] === "ALL_ERROR") {
 			console.log("TAG request received ALL_ERROR. Contact Clarifai support if it continues.");				
@@ -171,15 +162,13 @@ function tagMultipleURL(testImageURLs, ourIds) {
 // Crawler
 
 function crawl(domain, f) {
-	domain = "google.co.uk";
-	
   console.log(domain);
   console.log("starting crawler");
   
   var myCrawler = new crawler(domain);
   
   myCrawler.initialPath = "/";
-  myCrawler.initialProtocol = "https";
+  myCrawler.initialProtocol = "http";
 
   myCrawler.interval = 25;
   myCrawler.maxConcurrency = 1;
@@ -200,6 +189,11 @@ function crawl(domain, f) {
             var $ = window.$;
             var images = $("img").map(function (){
               var img = this.src;
+							
+							if (img.indexOf(".jpg") == -1) {
+								return;
+							}
+							
               if(img.substring(0,2) == "//"){
                 img = myCrawler.initialProtocol + ":" + img;
               }
