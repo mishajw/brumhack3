@@ -46,13 +46,25 @@ app.post('/upload', function (req, res) {
       console.log(urls[i]);
     }
     clarifai.tagURL( urls, files, function(err, ai) {
-      return commonResultHandler(err, ai, res);
+      return commonResultHandler(err, ai, res, "Your Files");
     });
 
 });
 
 app.post('/domain', function(req, res) {
-  var url = req.body.domain;
+  var url, msg;
+	
+	if (req.body.domain) {
+		url = req.body.domain;
+		msg = url;
+	} else if (req.body.hashtag) {
+		url = "https://twitter.com/hashtag/" + req.body.hashtag + "?f=images";
+		msg = "#" + req.body.hashtag;
+	} else {
+		console.log("Not posting domain properly.");
+		return;
+	}
+	
   crawl(url, function(pics,myCrawler) {
     myCrawler.stop();
 		pics = pics.slice(0, 20);
@@ -64,7 +76,7 @@ app.post('/domain', function(req, res) {
     console.log(pics);
     console.log(urls);
     clarifai.tagURL( urls, urls, function(err, ai){
-      return commonResultHandler(err, ai, res);
+      return commonResultHandler(err, ai, res, msg);
     });
   });
 });
@@ -82,7 +94,7 @@ clarifai.setThrottleHandler( function( bThrottled, waitSeconds ) {
 	console.log( bThrottled ? ["throttled. service available again in",waitSeconds,"seconds"].join(' ') : "not throttled");
 });
 
-function commonResultHandler( err, res, jacksvar) {
+function commonResultHandler( err, res, jacksvar, msg) {
 	if( err != null ) {
 		if( typeof err["status_code"] === "string" && err["status_code"] === "TIMEOUT") {
 			console.log("TAG request timed out");
@@ -115,6 +127,7 @@ function commonResultHandler( err, res, jacksvar) {
 				( res["status_code"] === "OK" || res["status_code"] === "PARTIAL_ERROR" )) {
         
         var dict = {};
+				console.log(res.results);
 				// the request completed successfully
 				for( i = 0; i < res.results.length; i++ ) {
 					if( res["results"][i]["status_code"] === "OK" ) {
@@ -123,10 +136,11 @@ function commonResultHandler( err, res, jacksvar) {
 							' tags='+res["results"][i].result["tag"]["classes"] )
             for( j = 0; j < res.results[i].result.tag.classes.length; j++){
               name = res.results[i].result.tag.classes[j];
+							var value = res.results[i].result.tag.probs[j];
               if (name in dict) {
-                dict[name]++;
+                dict[name] += value;
               } else {
-                dict[name] = 1;
+                dict[name] = value;
               }
             }
 					}
@@ -134,12 +148,12 @@ function commonResultHandler( err, res, jacksvar) {
 						console.log( 'docid='+res.results[i].docid +
 							' local_id='+res.results[i].local_id + 
 							' status_code='+res.results[i].status_code +
-							' error = '+res.results[i]["result"]["error"] )
+							' error = '+res.results[i]["result"]["error"])
 					}
 				}
 
         console.log(dict);
-        var returns = JSON.stringify(dict);
+        var returns = JSON.stringify({ msg: msg, data: dict });
         /*jacksvar.write(returns);
         jacksvar.end();*/
         var filePath = "public/results.html";
@@ -241,7 +255,5 @@ function crawl(url, f) {
     }
    setTimeout(function() {
      f(pics, myCrawler);
-   }, 1000);
+   }, 10000);
 }
-
-

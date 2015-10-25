@@ -19,11 +19,14 @@
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <script>
-            var data = JSONDATA;
+            var response = JSONDATA;
+						var data = response.data;
+						var msg = response.msg;
         </script>
 	</head>
     
-    <body onload="initGraphWithData();">
-        <div id="word-cloud"></div>
+  <body onload="initGraphWithData();">
+			<div id="title"></div>
+    <div id="word-cloud"></div>
 	</body>
 </html>
