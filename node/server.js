@@ -3,7 +3,7 @@ var express = require('express'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
-    crawler = require("simplecrawler"),
+    crawler = require("simplecrawler").Crawler,
     jsdom = require("jsdom"),
     app = express();
 
@@ -53,11 +53,13 @@ app.post('/upload', function (req, res) {
 
 app.post('/domain', function(req, res) {
   var url = req.body.domain;
-  crawl(url, function(pics, myCrawler) {
+  crawl(url, function(pics,myCrawler) {
+    myCrawler.stop();
+		pics = pics.slice(0, 20);
     urls = pics.filter(function(elem, pos,arr) {
       return arr.indexOf(elem) == pos;
     });
-    myCrawler.stop();
+		
     console.log("Callback");
     console.log(pics);
     console.log(urls);
@@ -66,18 +68,6 @@ app.post('/domain', function(req, res) {
     });
   });
 });
-  crawl("google.com", function(pics,myCrawler) {
-    myCrawler.stop();
-    urls = pics.filter(function(elem, pos,arr) {
-      return arr.indexOf(elem) == pos;
-    });
-    console.log("Callback");
-    console.log(pics);
-    console.log(urls);
-    clarifai.tagURL( urls, urls, function(err, ai){
-      return commonResultHandler(err, ai, res);
-    });
-  });
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
@@ -96,6 +86,7 @@ function commonResultHandler( err, res, jacksvar) {
 	if( err != null ) {
 		if( typeof err["status_code"] === "string" && err["status_code"] === "TIMEOUT") {
 			console.log("TAG request timed out");
+			console.log(err);
 		}
 		else if( typeof err["status_code"] === "string" && err["status_code"] === "ALL_ERROR") {
 			console.log("TAG request received ALL_ERROR. Contact Clarifai support if it continues.");				
@@ -177,10 +168,10 @@ function crawl(domain, f) {
   var myCrawler = new crawler(domain);
   
   myCrawler.initialPath = "/";
-  myCrawler.initialProtocol = "https";
+  //myCrawler.initialProtocol = "https";
 
   myCrawler.interval = 25;
-  myCrawler.maxConcurrency = 5;
+  myCrawler.maxConcurrency = 1;
 
   var pics = [];
 
@@ -198,6 +189,11 @@ function crawl(domain, f) {
             var $ = window.$;
             var images = $("img").map(function (){
               var img = this.src;
+							
+							if (img.indexOf(".jpg") == -1) {
+								return;
+							}
+							
               if(img.substring(0,2) == "//"){
                 img = myCrawler.initialProtocol + ":" + img;
               }
