@@ -114,6 +114,8 @@ function commonResultHandler( err, res, jacksvar, msg) {
 			console.log("TAG request encountered an unexpected error: ");
 			console.log(err);
 		}
+    jacksvar.writeHead(301, {"location" : "/error.html"});
+    jacksvar.end();
 	}
 	else {
 			// if some images were successfully tagged and some encountered errors,
@@ -202,7 +204,6 @@ function crawl(url, f) {
 	
   var myCrawler = new crawler(domain, path);
   
-  /*myCrawler.initialPath = "/";*/
   myCrawler.initialProtocol = proto;
 
   myCrawler.interval = 25;
@@ -246,6 +247,7 @@ function crawl(url, f) {
             });
           });
         });
+      console.log("about to start");
       myCrawler.start();
     }
     catch (e) {
