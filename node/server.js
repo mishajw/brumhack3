@@ -53,11 +53,11 @@ app.post('/upload', function (req, res) {
 
 app.post('/domain', function(req, res) {
   var url = req.body.domain;
-  crawl(url, function(pics,myCrawler) {
-    myCrawler.stop();
+  crawl(url, function(pics, myCrawler) {
     urls = pics.filter(function(elem, pos,arr) {
       return arr.indexOf(elem) == pos;
     });
+    myCrawler.stop();
     console.log("Callback");
     console.log(pics);
     console.log(urls);
@@ -211,6 +211,7 @@ function crawl(domain, f) {
             });
           });
         });
+      console.log("about to start");
       myCrawler.start();
     }
     catch (e) {
