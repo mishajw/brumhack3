@@ -3,7 +3,7 @@ var express = require('express'),
     multer = require('multer'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
-    crawler = require("simplecrawler"),
+    crawler = require("simplecrawler").Crawler,
     jsdom = require("jsdom"),
     app = express();
 
@@ -66,18 +66,18 @@ app.post('/domain', function(req, res) {
     });
   });
 });
-  crawl("google.com", function(pics,myCrawler) {
-    myCrawler.stop();
-    urls = pics.filter(function(elem, pos,arr) {
-      return arr.indexOf(elem) == pos;
-    });
-    console.log("Callback");
-    console.log(pics);
-    console.log(urls);
-    clarifai.tagURL( urls, urls, function(err, ai){
-      return commonResultHandler(err, ai, res);
-    });
-  });
+//	crawl("google.com", function(pics,myCrawler) {
+//		myCrawler.stop();
+//		urls = pics.filter(function(elem, pos,arr) {
+//			return arr.indexOf(elem) == pos;
+//		});
+//		console.log("Callback");
+//		console.log(pics);
+//		console.log(urls);
+//		clarifai.tagURL( urls, urls, function(err, ai){
+//			return commonResultHandler(err, ai, res);
+//		});
+//	});
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
@@ -171,6 +171,8 @@ function tagMultipleURL(testImageURLs, ourIds) {
 // Crawler
 
 function crawl(domain, f) {
+	domain = "google.co.uk";
+	
   console.log(domain);
   console.log("starting crawler");
   
@@ -180,7 +182,7 @@ function crawl(domain, f) {
   myCrawler.initialProtocol = "https";
 
   myCrawler.interval = 25;
-  myCrawler.maxConcurrency = 5;
+  myCrawler.maxConcurrency = 1;
 
   var pics = [];
 
