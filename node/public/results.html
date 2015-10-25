@@ -12,12 +12,13 @@
         <script src="js/d3.layout.cloud.js"></script>
         
         <!-- Our JS -->
-		<script src="js/main.js"></script>
+				<script src="js/main.js"></script>
         <script src="js/helperfunctions.js"></script>
         <script src="js/minmax.js"></script>
         
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
+				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <script>
             var response = JSONDATA;
 						var data = response.data;
@@ -27,6 +28,10 @@
     
   <body onload="initGraphWithData();">
 			<div id="title"></div>
-    <div id="word-cloud"></div>
+    	<div id="word-cloud"></div>
+			
+			<button id="back-button">
+					<i class="fa fa-chevron-circle-left"></i>
+			</button>
 	</body>
 </html>

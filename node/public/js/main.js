@@ -15,6 +15,7 @@ var graph = new (function Graph() {
         words = _words;
         
         displayGraph();
+				initBackButton();
         
         // Setup elements
         container = d3.select("#word-cloud")
@@ -82,29 +83,16 @@ var graph = new (function Graph() {
     
     function getActualSize(d) {
         var base = 20.0;
-        var scale = 70.0;
+        var scale = 90.0;
 //        var idealAmount = 50.0;
 //        var relativeSale = 1; // parseFloat(idealAmount / words.length);
         
         var size = base +
-            (parseFloat(mmSize.getScaledValue(d.value)) * scale/* * relativeSale*/);
+            (Math.pow(parseFloat(mmSize.getScaledValue(d.value)), 2) * scale/* * relativeSale*/);
 				
         return size;
     }
 })();
-
-var testWords = [{
-    text: "misha",
-    size: "20"
-},
-{
-    text: "dan",
-    size: "10"
-},
-{
-    text: "jack",
-    size: "10"
-}]
 
 function displayGraph() {
     $("#word-cloud").show();
@@ -112,8 +100,14 @@ function displayGraph() {
 }
 
 function initGraphWithData() {
+		var blackList = ["computer graphic", "symbol", "vector", "illustration"]
+		
     var justWords = [];
-    for (var k in data) { justWords.push(k); }
+    for (var k in data) {
+				if (blackList.indexOf(k) == -1) {
+						justWords.push(k);
+				}
+		}
     
     var finalData = [];
     for (var i = 0; i < justWords.length; i++) {
@@ -130,3 +124,11 @@ function initGraphWithData() {
 function showTitle(msg) {
 		$("#title").text(msg);
 }
+
+function initBackButton() {
+		$("#back-button").show();
+		$("#back-button").click(function() {
+				window.location = "/";
+		})
+}
+

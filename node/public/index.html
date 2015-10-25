@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-    <title>Clarafai Wordcloud</title>
+    <title>The Clarifai Wordcloud</title>
     <meta charset="utf-8"/>
         <!-- APIs -->
         <script src="js/jquery-2.1.4.min.js"></script>
@@ -20,6 +20,7 @@
             }
             
             function setup() {
+								$("#back-button").hide();
                 setupUploadButton();
                 setupChooserButton();
             }
@@ -41,7 +42,7 @@
                         $("#back-button").fadeIn(500);
                         $("#setup-chooser").hide();
                     });
-                }) 
+                });
             }
             
             function resetButtons() {
@@ -54,7 +55,7 @@
     
     <body onload="setup();">
         <div id="main-title">The <span>Clarifai</span> Wordcloud</div>
-        <div id="main-desc">By Misha, Jack, and Dan for Brumhack3</div>
+        <div id="main-desc">By Misha, Jack, and Dan for BrumHack 3. Using <a href="http://www.clarifai.com">Clarifai</a>, <a href="https://nodejs.org">Node.js</a>, and <a href="http://www.d3js.org">D3.js</a></div>
         
         <div id="setup-container">
             <div id="setup-chooser">
