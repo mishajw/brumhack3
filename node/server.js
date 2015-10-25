@@ -51,7 +51,7 @@ app.post('/upload', function (req, res) {
 
 });
 
-app.post('/domain', function(req, res) {
+app.get('/domain', function(req, res) {
   var url = req.body.domain;
   crawl(url, function(pics,myCrawler) {
     myCrawler.stop();
@@ -155,7 +155,7 @@ function tagMultipleURL(testImageURLs, ourIds) {
 
 // Crawler
 
-function crawl(domain) {
+function crawl(domain, f) {
   var myCrawler = new crawler(domain);
   
   myCrawler.initialPath = "/";
@@ -195,8 +195,7 @@ function crawl(domain) {
       console.log("Sensible error message");
     }
   setTimeout(function() {
-    console.log(pics);
-    myCrawler.stop()
+    f(pics, myCrawler)
   }, 10000);
 }
 
