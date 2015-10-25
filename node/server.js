@@ -81,6 +81,20 @@ app.post('/domain', function(req, res) {
   });
 });
 
+app.get("/error", function(req, res) {
+	var filePath = "public/results.html";
+		fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
+			if(!err){
+				stuff = data.replace("JSONDATA", JSON.stringify({msg: "You messed up.", data: null, urls: null}));
+				res.writeHead(200, {'Content-Type' : 'text/html'});
+				res.write(stuff);
+				res.end();
+			} else {
+				console.log(err);
+			}
+		});
+});
+
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
@@ -114,7 +128,7 @@ function commonResultHandler( err, res, jacksvar, msg) {
 			console.log("TAG request encountered an unexpected error: ");
 			console.log(err);
 		}
-    jacksvar.writeHead(301, {"location" : "/error.html"});
+    jacksvar.writeHead(301, {"location" : "/error"});
     jacksvar.end();
 	}
 	else {

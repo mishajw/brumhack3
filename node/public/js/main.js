@@ -100,6 +100,12 @@ function displayGraph() {
 }
 
 function initGraphWithData() {
+		showTitle(msg);
+	
+		if (!data) {
+				graph.init();
+				return;
+		}
 		var blackList = ["computer graphic", "symbol", "vector", "illustration"]
 		
     var justWords = [];
@@ -117,7 +123,6 @@ function initGraphWithData() {
         });
     }
     
-		showTitle(msg);
     graph.init(finalData);
 }
 
